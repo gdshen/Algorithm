@@ -17,4 +17,4 @@ def quicksort(start, end, mid):
 
 if __name__ == "__main__":
     t = np.random.rand(1000)
-    quicksort(1,2,3)
+    quicksort(1, 2, 3)
