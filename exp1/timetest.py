@@ -1,8 +1,7 @@
-__author__ = 'shen'
 import numpy as np
-import time
 from exp1.quicksort import quicksort
 from exp1.bubblesort import bubblesort
+from exp1.mergesort import mergesort
 import arrow
 
 
@@ -24,3 +23,18 @@ if __name__ == "__main__":
         t2 = arrow.now()
         t = t2 - t1
         print("在{0}个数据下，{1}效率为{2} 秒".format(i, quicksort.__name__, t))
+
+        t1 = arrow.now()
+        array = getRandomArray(i)
+        l = mergesort(array)
+        t2 = arrow.now()
+        t = t2 - t1
+        print("在{0}个数据下，{1}效率为{2} 秒".format(i, mergesort.__name__, t))
+
+        t1 = arrow.now()
+        array = getRandomArray(i)
+        bubblesort(array)
+        t2 = arrow.now()
+        t = t2 - t1
+        print("在{0}个数据下，{1}效率为{2} 秒".format(i, bubblesort.__name__, t))
+        print("\n")
