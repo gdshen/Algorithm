@@ -35,7 +35,7 @@ def quicksort(array, start, end):
 
 
 if __name__ == "__main__":
-    t = np.random.rand(100000)
+    t = np.random.rand(1000000)
     t1 = time.clock()
     quicksort(t, 0, len(t) - 1)
     t2 = time.clock()
