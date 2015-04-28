@@ -3,7 +3,7 @@ class RBNode():
     right = None
     parent = None
     key = 0
-    color = True
+    color = True  # True 代表红色， False 代表黑色
 
     def __init__(self, key=None, color=True, parent=None, left=None, right=None):
         self.left = left
@@ -13,6 +13,7 @@ class RBNode():
         self.key = key
 
 
+# 测试在使用类似x = x.left 的时候是否改变了什么东西，测试完成，没有改变ID
 class RBTree():
     nil = RBNode(color=False)
     root = nil
@@ -20,7 +21,7 @@ class RBTree():
     def __init__(self):
         print("初始化建树")
 
-    # todo 测试左旋函数，构造测试样例
+    # 左旋函数测试通过
     def left_rotate(self, x):
         y = x.right
         x.right = y.left
@@ -37,7 +38,7 @@ class RBTree():
         y.left = x
         x.parent = y
 
-    # todo 测试右旋函数，构造测试样例
+    # 右旋函数测试通过
     def right_rotate(self, x):
         y = x.left
         x.left = y.right
@@ -53,6 +54,7 @@ class RBTree():
         y.right = x
         x.parent = y
 
+    # todo 测试
     def insert_fix_up(self, z):
         while z.parent.color:
             if z.parent == z.parent.parent.left:
@@ -83,6 +85,7 @@ class RBTree():
                 self.left_rotate(z.parent.parent)
         self.root.color = False
 
+    # 普通插入测试通过
     def insert_key(self, key):
         z = RBNode(key=key)
         y = self.nil
@@ -103,7 +106,7 @@ class RBTree():
         z.left = self.nil
         z.right = self.nil
         z.color = True
-        self.insert_fix_up(z)
+        # self.insert_fix_up(z)
 
     # todo 测试函数正确性
     def delete_key(self, z):
@@ -129,13 +132,7 @@ class RBTree():
             self.delete_key_fix_up(x)
         return y
 
-    def prints(self, z):
-        if z != self.nil:
-            # return str(self.printTree(z.left)) + " " + str(z.key) + " " + str(self.printTree(z.right))
-            self.prints(z.left)
-            print(str(z.key) + " " + str(z.color), end=" ")
-            self.prints(z.right)
-
+    # todo 测试
     def tree_successor(self, x):
         if x.right != self.nil:
             return self.tree_minimum(x.right)
@@ -145,6 +142,7 @@ class RBTree():
             y = y.parent
         return y
 
+    # todo 测试
     def delete_key_fix_up(self, x):
         while x != self.root and not x.color:
             if x == x.parent.left:
@@ -189,19 +187,30 @@ class RBTree():
                 x = self.root
         x.color = False
 
+    # todo 测试
     def tree_minimum(self, x):
         while x.left != self.nil:
             x = x.left
         return x
 
+    def print_tree(self, z):
+        # 按照层次打印数的结构
+        if z != self.nil:
+            print("{0} {1}->{2} {3} && {4} {5}".format(z.key, z.color, z.left.key, z.left.color, z.right.key,
+                                                       z.right.color))
+            self.print_tree(z.left)
+            self.print_tree(z.right)
+
 
 if __name__ == "__main__":
     a = RBTree()
-    a.insert_key(12)
-    a.insert_key(11)
-    a.insert_key(10)
-    a.insert_key(13)
-    a.insert_key(14)
-    a.insert_key(15)
+    a.insert_key(5)
+    a.insert_key(4)
+    a.insert_key(7)
     a.insert_key(3)
-    a.prints(a.root)
+    a.insert_key(6)
+    a.insert_key(8)
+    a.insert_key(4.5)
+    a.insert_key(4.2)
+    a.print_tree(a.root)
+    a.right_rotate(a.root.left)
