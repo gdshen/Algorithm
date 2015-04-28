@@ -232,8 +232,7 @@ class IntervalTree():
 
     def print_tree(self, z):
         if z != self.nil:
-            print("{0} {1} {6}->{2} {3} && {4} {5}".format(z.key, z.color, z.left.key, z.left.color, z.right.key,
-                                                           z.right.color, z.max_time))
+            print("{0} {1} {2}->{3} && {4}".format(z.key, z.color, z.max_time, z.left.key, z.right.key, z.right.color))
             self.print_tree(z.left)
             self.print_tree(z.right)
 
@@ -248,7 +247,7 @@ class IntervalTree():
     def search_overlap(self, interval, z):
         if z != self.nil:
             if z.key[0] < interval[1] and interval[0] < z.key[1]:
-                print("找到一门课程{0} {1}".format(z.course_name, z.course_number))
+                print("找到一门课程{0} {1} {2}".format(z.course_name, z.course_number, z.key))
             self.search_overlap(interval, z.left)
             self.search_overlap(interval, z.right)
 
@@ -271,4 +270,5 @@ if __name__ == "__main__":
     print()
 
     a.search_overlap([6, 6.5], a.root)
+    print()
     a.print_tree(a.root)
