@@ -130,7 +130,6 @@ class RBTree():
         if y != z:
             z.key = y.key
         if not y.color:
-            pass
             self.delete_key_fix_up(x)
         return y
 
@@ -208,10 +207,25 @@ class RBTree():
 
 if __name__ == "__main__":
     a = RBTree()
-    a.insert_key(41)
-    a.insert_key(38)
-    a.insert_key(31)
+    # 12 1 9 2 0 11 7 19 4 15 18 5 14 13 10 16 6 3 8 17
     a.insert_key(12)
+    a.insert_key(1)
+    a.insert_key(9)
+    a.insert_key(2)
+    a.insert_key(0)
+    a.insert_key(11)
+    a.insert_key(7)
     a.insert_key(19)
+    a.insert_key(4)
+    a.insert_key(15)
+    a.insert_key(18)
+    a.insert_key(5)
+    a.insert_key(14)
+    a.insert_key(13)
+    a.insert_key(10)
+    a.insert_key(16)
+    a.insert_key(6)
+    a.insert_key(3)
     a.insert_key(8)
+    a.insert_key(17)
     a.print_tree(a.root)
