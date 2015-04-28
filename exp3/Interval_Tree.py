@@ -9,9 +9,8 @@
 (done)1. 每棵树的节点信息，课程编号，课程名称，课程时间区间，Max时间，left，right，parent，color
 (done)2. 插入一门新课，使用红黑树的插入算法,找到更新max域的地方
 (done)3. 删除课程，使用课程编号删除课程
-4. 查询与特定时间区间有重合的的节点，输出全部节点
-5. 样例部分演示插入，删除，与查询
-todo 删除部分
+(done)4. 查询与特定时间区间有重合的的节点，输出全部节点
+(done)5. 样例部分演示插入，删除，与查询
 """
 
 
@@ -36,7 +35,6 @@ class IntervalTree():
     nil = IntervalTreeNode(color=False)
     root = nil
 
-    # 左旋函数测试通过
     def left_rotate(self, x):
         y = x.right
         x.right = y.left
@@ -56,7 +54,6 @@ class IntervalTree():
         x.max_time = max(x.key[1], x.left.max_time, x.right.max_time)
         y.max_time = max(y.key[1], y.left.max_time, y.right.max_time)
 
-    # 右旋函数测试通过
     def right_rotate(self, x):
         y = x.left
         x.left = y.right
@@ -75,7 +72,6 @@ class IntervalTree():
         x.max_time = max(x.key[1], x.left.max_time, x.right.max_time)
         y.max_time = max(y.key[1], y.left.max_time, y.right.max_time)
 
-    # 普通插入测试通过
     def insert_key(self, key, course_name, course_number):
         z = IntervalTreeNode(key=key, course_name=course_name, course_number=course_number)
         y = self.nil
@@ -106,7 +102,6 @@ class IntervalTree():
             w = w.parent
         self.insert_fix_up(z)
 
-    # 测试通过
     def insert_fix_up(self, z):
         while z.parent.color:
             if z.parent == z.parent.parent.left:
@@ -139,7 +134,6 @@ class IntervalTree():
                     self.left_rotate(z.parent.parent)
         self.root.color = False
 
-    # 测试通过
     def delete_course(self, z, course_number):
         if z != self.nil:
             if z.course_number == course_number:
@@ -231,13 +225,11 @@ class IntervalTree():
             y = y.parent
         return y
 
-    # 完成测试
     def tree_minimum(self, x):
         while x.left != self.nil:
             x = x.left
         return x
 
-    # 按照层次打印数的结构
     def print_tree(self, z):
         if z != self.nil:
             print("{0} {1} {6}->{2} {3} && {4} {5}".format(z.key, z.color, z.left.key, z.left.color, z.right.key,
@@ -253,6 +245,13 @@ class IntervalTree():
             w.max_time = max(w.key[1], w.left.max_time, w.right.max_time)
             w = w.parent
 
+    def search_overlap(self, interval, z):
+        if z != self.nil:
+            if z.key[0] < interval[1] and interval[0] < z.key[1]:
+                print("找到一门课程{0} {1}".format(z.course_name, z.course_number))
+            self.search_overlap(interval, z.left)
+            self.search_overlap(interval, z.right)
+
 
 if __name__ == "__main__":
     a = IntervalTree()
@@ -264,5 +263,12 @@ if __name__ == "__main__":
     a.insert_key([8, 10], "course6", "number6")
     a.insert_key([4.5, 7], "course7", "number7")
     a.insert_key([4.2, 5.3], "course8", "number8")
+    a.print_tree(a.root)
+    print()
+
+    a.search_overlap([6, 6.5], a.root)
     a.delete_course(a.root, "number2")
+    print()
+
+    a.search_overlap([6, 6.5], a.root)
     a.print_tree(a.root)
