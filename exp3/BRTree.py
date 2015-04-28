@@ -18,9 +18,6 @@ class RBTree():
     nil = RBNode(color=False)
     root = nil
 
-    def __init__(self):
-        print("初始化建树")
-
     # 左旋函数测试通过
     def left_rotate(self, x):
         y = x.right
@@ -54,37 +51,6 @@ class RBTree():
         y.right = x
         x.parent = y
 
-    # todo 测试
-    def insert_fix_up(self, z):
-        while z.parent.color:
-            if z.parent == z.parent.parent.left:
-                y = z.parent.parent.right
-                if y.color:
-                    z.parent.color = False
-                    y.color = False
-                    z.parent.parent.color = True
-                    z = z.parent.parent
-                elif z == z.parent.right:
-                    z = z.parent
-                    self.left_rotate(z)
-                z.parent.color = False
-                z.parent.parent.color = True
-                self.right_rotate(z.parent.parent)
-            else:
-                y = z.parent.parent.left
-                if y.color:
-                    z.parent.color = False
-                    y.color = False
-                    z.parent.parent.color = True
-                    z = z.parent.parent
-                elif z == z.parent.left:
-                    z = z.parent
-                    self.right_rotate(z)
-                z.parent.color = False
-                z.parent.parent.color = True
-                self.left_rotate(z.parent.parent)
-        self.root.color = False
-
     # 普通插入测试通过
     def insert_key(self, key):
         z = RBNode(key=key)
@@ -106,18 +72,54 @@ class RBTree():
         z.left = self.nil
         z.right = self.nil
         z.color = True
-        # self.insert_fix_up(z)
+        self.insert_fix_up(z)
 
-    # todo 测试函数正确性
+    # 测试通过
+    def insert_fix_up(self, z):
+        while z.parent.color:
+            if z.parent == z.parent.parent.left:
+                y = z.parent.parent.right
+                if y.color:
+                    z.parent.color = False
+                    y.color = False
+                    z.parent.parent.color = True
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.right:
+                        z = z.parent
+                        self.left_rotate(z)
+                    z.parent.color = False  # 确定这两句话应该处于的位置
+                    z.parent.parent.color = True  # 确定这句话的缩进
+                    self.right_rotate(z.parent.parent)
+            else:
+                y = z.parent.parent.left
+                if y.color:
+                    z.parent.color = False
+                    y.color = False
+                    z.parent.parent.color = True
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.left:
+                        z = z.parent
+                        self.right_rotate(z)
+                    z.parent.color = False  # 确定这句话的缩进
+                    z.parent.parent.color = True  # 确定这句话的缩进
+                    self.left_rotate(z.parent.parent)
+        self.root.color = False
+
+    # 删除函数得到验证
     def delete_key(self, z):
+        # y是要删除的节点，这个if循环找到要删除的节点
         if z.left == self.nil or z.right == self.nil:
             y = z
         else:
             y = self.tree_successor(z)
+
         if y.left != self.nil:
             x = y.left
         else:
             x = y.right
+
         x.parent = y.parent
         if y.parent == self.nil:
             self.root = x
@@ -127,44 +129,35 @@ class RBTree():
             y.parent.right = x
         if y != z:
             z.key = y.key
-            # todo 拷贝数据
         if not y.color:
+            pass
             self.delete_key_fix_up(x)
         return y
 
-    # todo 测试
-    def tree_successor(self, x):
-        if x.right != self.nil:
-            return self.tree_minimum(x.right)
-        y = x.parent
-        while y != self.nil and x == y.parent:
-            x = y
-            y = y.parent
-        return y
-
-    # todo 测试
+    # 完成测试
     def delete_key_fix_up(self, x):
         while x != self.root and not x.color:
             if x == x.parent.left:
                 w = x.parent.right
                 if w.color:
                     w.color = False
-                    x.parent.color = False
+                    x.parent.color = True
                     self.left_rotate(x.parent)
                     w = x.parent.right
                 if not w.left.color and not w.right.color:
                     w.color = True
                     x = x.parent
-                elif not w.right.color:
-                    w.left.color = False
-                    w.color = True
-                    self.right_rotate(w)
-                    w = x.parent.right
-                w.color = x.parent.color
-                x.parent.color = False
-                w.right.color = False
-                self.left_rotate(x.parent)
-                x = self.root
+                else:
+                    if not w.right.color:
+                        w.left.color = False
+                        w.color = True
+                        self.right_rotate(w)
+                        w = x.parent.right
+                    w.color = x.parent.color
+                    x.parent.color = False
+                    w.right.color = False
+                    self.left_rotate(x.parent)
+                    x = self.root
             else:
                 w = x.parent.left
                 if w.color:
@@ -175,26 +168,37 @@ class RBTree():
                 if not w.right.color and not w.left.color:
                     w.color = True
                     x = x.parent
-                elif not w.left.color:
-                    w.right.color = False
-                    w.color = True
-                    self.left_rotate(w)
-                    w = x.parent.left
-                    w.color = x.parent.color
-                x.parent.color = False
-                w.left.color = False
-                self.right_rotate(x.parent)
-                x = self.root
+                else:
+                    if not w.left.color:
+                        w.right.color = False
+                        w.color = True
+                        self.left_rotate(w)
+                        w = x.parent.left
+                        w.color = x.parent.color
+                    x.parent.color = False
+                    w.left.color = False
+                    self.right_rotate(x.parent)
+                    x = self.root
         x.color = False
 
-    # todo 测试
+    # 通过测试
+    def tree_successor(self, x):
+        if x.right != self.nil:
+            return self.tree_minimum(x.right)
+        y = x.parent
+        while y != self.nil and x == y.right:
+            x = y
+            y = y.parent
+        return y
+
+    # 完成测试
     def tree_minimum(self, x):
         while x.left != self.nil:
             x = x.left
         return x
 
+    # 按照层次打印数的结构
     def print_tree(self, z):
-        # 按照层次打印数的结构
         if z != self.nil:
             print("{0} {1}->{2} {3} && {4} {5}".format(z.key, z.color, z.left.key, z.left.color, z.right.key,
                                                        z.right.color))
@@ -204,13 +208,10 @@ class RBTree():
 
 if __name__ == "__main__":
     a = RBTree()
-    a.insert_key(5)
-    a.insert_key(4)
-    a.insert_key(7)
-    a.insert_key(3)
-    a.insert_key(6)
+    a.insert_key(41)
+    a.insert_key(38)
+    a.insert_key(31)
+    a.insert_key(12)
+    a.insert_key(19)
     a.insert_key(8)
-    a.insert_key(4.5)
-    a.insert_key(4.2)
     a.print_tree(a.root)
-    a.right_rotate(a.root.left)
