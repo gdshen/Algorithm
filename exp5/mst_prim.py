@@ -26,7 +26,6 @@ def extract_min(q, V):
 
 def mst_trim(G):
     A = []
-    l = len(G)
     V = [Node(i) for i in range(9)]
     q = {i for i in range(len(G))}
     for i in range(len(G)):
