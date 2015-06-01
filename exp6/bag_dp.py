@@ -3,7 +3,7 @@ from pprint import pprint
 
 w = [0, 5, 2, 1, 6, 3]
 v = [0, 3, 6, 8, 2, 1]
-c = 5
+c = 6
 n = len(w) - 1
 m = [[0 for j in range(c + 1)] for i in range(n + 1)]
 x = [0 for i in range(n + 1)]
